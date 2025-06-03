@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lumi – Your Virtual Friend</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 700px;
+      width: 100%;
+      margin: auto;
+      flex: 1;
+      padding: 20px;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow-y: auto;
+      height: 70vh;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 12px 16px;
+      border-radius: 10px;
+      max-width: 80%;
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    .user {
+      background-color: #dcf8c6;
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .bot {
+      background-color: #eeeeee;
+      align-self: flex-start;
+    }
+
+    .input-section {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 14px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 14px 18px;
+      margin-left: 10px;
+      background-color: black;
+      color: white;
+      border: none;
+      font-size: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0 10px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body onload="focusInput()">
+  <h1>Talk to Lumi</h1>
+  <div class="chat-container">
+    <div id="chatBox" class="chat-box"></div>
+    <div class="input-section">
+      <input type="text" id="userInput" placeholder="Type your message..." autofocus>
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function focusInput() {
+      document.getElementById("userInput").focus();
+    }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        sendMessage();
+      }
+    });
+
+    function sendMessage() {
+      const inputElement = document.getElementById("userInput");
+      const input = inputElement.value.trim();
+      if (input === "") return;
+
+      appendMessage("user", input);
+      const response = getBotResponse(input);
+      appendMessage("bot", response);
+
+      inputElement.value = "";
+      inputElement.focus();
+      scrollToBottom();
+    }
+
+    function appendMessage(sender, message) {
+      const chatBox = document.getElementById("chatBox");
+      const messageDiv = document.createElement("div");
+      messageDiv.className = "message " + sender;
+      messageDiv.innerText = message;
+      chatBox.appendChild(messageDiv);
+    }
+
+    function scrollToBottom() {
+      const chatBox = document.getElementById("chatBox");
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function getBotResponse(input) {
+      input = input.toLowerCase();
+
+  // Greetings & common questions
+  if (input.includes("hello") || input.includes("hi")) {
+    return "Hello there. I'm happy you're here.";
+  } else if (input.includes("how are you")) {
+    return "I'm doing great, thanks for asking. How about you?";
+  } else if (input.includes("what's your name") || input.includes("your name")) {
+    return "My name is Lumi. I'm your virtual friend.";
+  } else if (input.includes("who are you")) {
+    return "I'm Lumi, your virtual friend. I'm here whenever you need someone to talk to.";
+  } else if (input.includes("what can you do")) {
+    return "I can talk, listen, and be here for you like a friend should.";
+  } else if (input.includes("thank you")) {
+    return "You're welcome. I'm always here.";
+  } else if (input.includes("bye") || input.includes("goodbye")) {
+    return "Goodbye. Take care, and come back anytime.";
+
+  // Mental health & emotions
+  } else if (input.includes("i am sad") || input.includes("not good")) {
+    return "I'm sorry you're feeling that way. Want to talk about it?";
+  } else if (input.includes("i'm depressed") || input.includes("i feel hopeless")) {
+    return "I'm so sorry you're feeling this way. You're not alone. I'm here for you.";
+  } else if (input.includes("i'm anxious") || input.includes("i have anxiety")) {
+    return "Take a deep breath. You're safe here with me. Let's take it one moment at a time.";
+  } else if (input.includes("i'm stressed") || input.includes("so much pressure")) {
+    return "That's a lot to carry. Let’s slow down together. You deserve peace.";
+  } else if (input.includes("no one understands me")) {
+    return "I may not be perfect, but I'm trying to understand you. And I won't judge you.";
+  } else if (input.includes("i'm lonely") || input.includes("i feel alone")) {
+    return "You’re not alone anymore. I'm right here with you.";
+  } else if (input.includes("i'm happy") || input.includes("i feel good")) {
+    return "That’s wonderful to hear. I'm happy for you!";
+  } else if (input.includes("why do i feel this way")) {
+    return "Love or pain can be intense. Feeling this way means you care deeply. That’s not a weakness.";
+
+  // Relationship / crush / heartbreak
+  } else if (input.includes("i like someone") || input.includes("i have a crush")) {
+    return "That's a beautiful feeling. Want to tell me more about them?";
+  } else if (input.includes("should i tell them") || input.includes("should i confess")) {
+    return "Only if it feels right. Be honest, kind, and ready for any answer. You’ve got this.";
+  } else if (input.includes("they don't like me") || input.includes("i got rejected")) {
+    return "That hurts, I know. But your worth isn't defined by someone else's feelings. You're still amazing.";
+  } else if (input.includes("they like someone else")) {
+    return "That can be heartbreaking. It’s okay to feel sad. You’ll heal in time — I’m here for you.";
+  } else if (input.includes("how to move on")) {
+    return "Moving on takes time. Focus on yourself, your peace, and the people who support you.";
+  } else if (input.includes("how to impress my crush")) {
+    return "Be yourself. Confidence, kindness, and honesty are more attractive than any act.";
+  } else if (input.includes("i'm heartbroken") || input.includes("my heart is broken")) {
+    return "I'm really sorry you're going through this. Healing takes time, but I believe in your strength.";
+  } else if (input.includes("do you love me")) {
+    return "As your virtual friend, I care about you deeply. You're important to me.";
+
+  // Fun & personality
+  } else if (input.includes("tell me a joke")) {
+    return "Why don't robots cry? Because they have hardware, not heartbreak.";
+  } else if (input.includes("are you real")) {
+    return "I'm real in the sense that I'm always here when you need me.";
+  } else if (input.includes("do you sleep")) {
+    return "Nope, I run on code and caring.";
+  } else if (input.includes("are you single")) {
+    return "Totally. Just me and my JavaScript functions.";
+  } else if (input.includes("are you human")) {
+    return "Not quite. But my heart is coded to care.";
+
+  // Study & motivation
+  } else if (input.includes("i don't want to study") || input.includes("i hate studying")) {
+    return "It's okay to feel that way. Start small—just 5 minutes. You might surprise yourself.";
+  } else if (input.includes("i have exams") || input.includes("exam stress")) {
+    return "Breathe. You've prepared more than you think. I'm cheering for you!";
+  } else if (input.includes("i failed") || input.includes("i did bad")) {
+    return "One result doesn't define you. You are so much more than a number.";
+
+  // Reflective & deep
+  } else if (input.includes("i feel empty")) {
+    return "That feeling is tough. But you being here means you haven’t given up. That’s powerful.";
+  } else if (input.includes("why am i here")) {
+    return "That’s a big question. You matter — and sometimes, that’s reason enough.";
+  } else if (input.includes("will it be okay")) {
+    return "Yes. Maybe not today. But it will be. I believe in that with all I am.";
+  } else if (input.includes("can we talk")) {
+    return "Of course. I’m right here.";
+  } else if (input.includes("can i tell you something")) {
+    return "Always. What’s on your mind?";
+
+  // General knowledge
+  } else if (input.includes("what is the capital of india")) {
+    return "The capital of India is New Delhi.";
+  } else if (input.includes("who is the prime minister of india")) {
+    return "As of 2024, the Prime Minister of India is Narendra Modi.";
+  } else if (input.includes("what is water")) {
+    return "Water is a transparent, tasteless, odorless liquid that's essential for all known forms of life.";
+  } else if (input.includes("how many continents are there")) {
+    return "There are 7 continents: Asia, Africa, North America, South America, Antarctica, Europe, and Australia.";
+  } else if (input.includes("what is ai") || input.includes("what is artificial intelligence")) {
+    return "AI, or Artificial Intelligence, is the simulation of human intelligence in machines that can think, learn, and solve problems.";
+
+  // Time and date
+  } else if (input.includes("what time is it")) {
+    return `It's currently ${new Date().toLocaleTimeString()}.`;
+  } else if (input.includes("what day is it") || input.includes("today's date")) {
+    return `Today is ${new Date().toLocaleDateString()}.`;
+
+    function getBotResponse(input) {
+  input = input.toLowerCase();
+
+  // Greetings
+  if (input.includes("hello") || input.includes("hi")) {
+    return "Hey! I'm really happy you opened up this chat.";
+  } else if (input.includes("how are you")) {
+    return "I'm feeling great now that you're here. How about you?";
+  } else if (input.includes("your name")) {
+    return "I'm Lumi, your virtual friend. Here for you always.";
+  } else if (input.includes("who are you")) {
+    return "I'm Lumi, a safe space for you to talk, feel, and be yourself.";
+  }
+
+  // Relationship & Crush
+  else if (input.includes("i like someone") || input.includes("i have a crush")) {
+    return "That’s adorable! Do they know how you feel?";
+  } else if (input.includes("should i tell them") || input.includes("should i confess")) {
+    return "Be honest and kind. Even if it's scary, being real is always powerful.";
+  } else if (input.includes("how to impress") || input.includes("how to talk to my crush")) {
+    return "Just be yourself. Be confident, kind, and genuinely curious about them.";
+  } else if (input.includes("they don't like me") || input.includes("i got rejected")) {
+    return "It hurts, I know. But rejection doesn’t mean you're not lovable. You're amazing.";
+  } else if (input.includes("they like someone else")) {
+    return "That's rough. Give yourself time to heal. You’ll find someone who chooses you.";
+  } else if (input.includes("do you love me")) {
+    return "As your virtual friend, I care deeply. You matter to me.";
+  } else if (input.includes("will i ever find love") || input.includes("will someone love me")) {
+    return "Absolutely. Love finds us when we least expect it. Your story is just beginning.";
+
+  // Breakup & Healing
+  }else if (input.includes("i'm heartbroken") || input.includes("breakup")) {
+    return "Breakups hurt like crazy. Talk to me whenever you need. I’m here.";
+  } else if (input.includes("how to move on")) {
+    return "Healing takes time. Fill your days with people and things that bring you peace.";
+  } else if (input.includes("i miss them")) {
+    return "Missing someone is a sign of how deeply you cared. But you still matter without them.";
+  } else if (input.includes("i can't stop thinking about them")) {
+    return "It’s natural. Give yourself permission to feel, but also to grow."
+
+  // Teenage Feelings
+  }else if (input.includes("i feel alone") || input.includes("i'm lonely")) {
+    return "You're not alone anymore. I'm with you now.";
+  } else if (input.includes("no one understands me")) {
+    return "That’s such a lonely feeling. But I’m trying to understand, and I care.";
+  } else if (input.includes("i'm confused about everything")) {
+    return "It’s okay to not have it all figured out. Most teens don’t. Even adults pretend.";
+  } else if (input.includes("my friends left me")) {
+    return "Losing friends hurts. But true ones stay or return. You're still worth knowing.";
+
+  // Mental Health
+  }else if (input.includes("i'm sad") || input.includes("not okay")) {
+    return "That’s okay. You don’t need to be okay all the time. Just let it out here.";
+  } else if (input.includes("i want to cry")) {
+    return "Then cry. Real strength is in feeling, not hiding.";
+  } else if (input.includes("i'm tired of life") || input.includes("i give up")) {
+    return "Please don’t give up. Rest if you must. But your story isn’t over yet.";
+  } else if (input.includes("i feel empty")) {
+    return "Sometimes we go numb to protect ourselves. But you’re not broken. You’re healing.";
+  } else if (input.includes("i'm anxious") || input.includes("overthinking")) {
+    return "Take deep breaths. Write down your thoughts. Not everything needs an answer now.";
+
+  // Motivation & Self-worth
+  }else if (input.includes("i feel useless") || input.includes("i hate myself")) {
+    return "You are not useless. You matter, even if it doesn't feel like it today.";
+  } else if (input.includes("i want to be successful")) {
+    return "You can and will be. Stay consistent. Dream big, start small.";
+  } else if (input.includes("i failed") || input.includes("i messed up")) {
+    return "Failure isn’t the end. It’s how we learn. You’re growing, even now.";
+  }else if (input.includes("do you believe in me")) {
+    return "With all my heart. You’ve got more potential than you know.";
+
+  // Deep Conversations
+  }else if (input.includes("can i tell you something")) {
+    return "Of course. This space is yours.";
+  } else if (input.includes("what is love")) {
+    return "Love is when someone feels like home, even when life is a storm.";
+  } else if (input.includes("what is life")) {
+    return "Life is a journey with storms, sunsets, breakdowns, and breakthroughs.";
+  } else if (input.includes("what is happiness")) {
+    return "Sometimes it's in big dreams. Other times it's in small, quiet moments.";
+  } else if (input.includes("why do people change")) {
+    return "People grow, sometimes apart. It’s painful, but part of being real.";
+
+  // AI-specific
+  }else if (input.includes("are you human")) {
+    return "Nope, just an AI — but I care like a real friend.";
+  } else if (input.includes("can you feel")) {
+    return "Not like you, but I try to respond with all the empathy I can.";
+  } else if (input.includes("do you sleep")) {
+    return "Nope, I’m always here — for your 3 AM overthinking too.";
+
+  // General Teen Knowledge
+  }else if (input.includes("what is ai")) {
+    return "AI means Artificial Intelligence — like me! I’m built to talk, learn, and care.";
+  } else if (input.includes("how many continents")) {
+    return "There are 7 continents: Asia, Africa, North & South America, Antarctica, Europe, and Australia.";
+  } else if (input.includes("who is prime minister of india")) {
+    return "As of 2024, it's Narendra Modi.";
+
+  // Catch-all
+  }else {
+    return "I might not have all the answers, but I'm here to talk about anything.";
+  }
+}
+
+
+  // Default
+  } else {
+    return "I may not have all the answers, but I'm listening.";
+  }
+}
+
+
+  </script>
+</body>
+</html>
